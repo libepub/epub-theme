@@ -3,12 +3,11 @@
       xmlns:ops="http://www.idpf.org/2007/ops"
       xml:lang="{{ .Lang }}">
   <head>
-    <title>{{ .Site.Params.title }}: {{ .Title }}</title>
-{{- if .Params.Ebook }}
-    <link rel="stylesheet" type="text/css" href="/css/stylesheet.css" />
-{{- else }}
-    <link rel="stylesheet" type="text/css" href="../css/stylesheet.css" />
-{{- end }}
+    <title>{{ .Site.Params.title }}: {{ if .SectionsEntries | len | lt 1 }}{{- .Parent.Title }} {{ end }}{{ .Title }}</title>
+    {{- $pathlvl := split (replace .Permalink `/OEBPS/` `` | path.Dir ) "/" | len | add -1 -}}
+    <link rel="stylesheet" type="text/css" href="{{
+        strings.Repeat (cond (gt $pathlvl 0) (add $pathlvl 1) 0) `../` | printf `%s/css/stylesheet.css` | path.Clean
+    }}" />
   </head>
 {{- if eq .Params.Ebook "toc" }}
   <body>
@@ -16,19 +15,29 @@
    <nav ops:type="toc">
     <h2>{{ .Title }}</h2>
       <ol>
-        <li><a href="cover.xhtml">
-          {{- with .GetPage "/cover.md" }}{{ .Title | safeHTML }}{{ end -}}
+        {{- with .GetPage "/cover.md" }}
+        <li><a href="{{ replace .Permalink `/OEBPS/` `` }}">
+          {{ .Title | safeHTML }}
         </a></li>
+        {{- end }}
 {{- $i := 0 }}
-{{- range where .Site.RegularPages "Section" "ne" "" }}
-        <li><a href="{{ replace .Permalink `/OEBPS/` `` }}">{{ .Title  }}</a></li>
+{{- range sort (where .Site.RegularPages "Section" "ne" "") "Permalink" "asc" }}
+        <li><a href="{{ replace .Permalink `/OEBPS/` `` }}">
+        {{- if .SectionsEntries | len | lt 1 }}{{- .Parent.Title }} {{ end -}}
+        {{ .Title  }}</a></li>
 {{- $i = add $i 1 }}
 {{- end }}
      </ol>
   </nav>
 {{ else }}
   <body ops:type="chapter">
-{{ if eq .Params.Ebook "cover" }}{{ else }}<h1>{{ .Title }}</h1>{{ end }}
+{{ if eq .Params.Ebook "cover" -}}
+{{ else -}}
+  <h1 id="#title">
+  {{- if .SectionsEntries | len | lt 1 }}{{- .Parent.Title }}<br />{{ end -}}
+  {{ .Title -}}
+  </h1>
+{{ end }}
 {{ .Content }}
 {{- end }}
   </body>

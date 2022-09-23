@@ -1,0 +1,15 @@
+{{ $i := .ch -}}
+{{- range sort .ctx.Site.RegularPages "Permalink" "asc" }}
+  {{- if .OutputFormats | complement .AlternativeOutputFormats | len | eq 0 }}
+    <navPoint id="navptr{{ $i }}"
+      playOrder="{{ $i }}">
+      <navLabel>
+        <text>
+        {{- if .SectionsEntries | len | lt 1 }}{{- .Parent.Title }} {{ end -}}
+        {{ .Title }}</text>
+      </navLabel>
+      <content src="{{ replace .Permalink `/OEBPS/` `` }}" />
+    </navPoint>
+    {{ $i = add $i 1 -}}
+  {{- end -}}
+{{- end -}}

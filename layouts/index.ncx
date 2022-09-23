@@ -11,33 +11,6 @@
   <docAuthor><text>{{ .Site.Params.creator }}</text></docAuthor>
 
   <navMap>
-    <navPoint id="cover" playOrder="1">
-      <navLabel>
-        {{ with .GetPage "/cover.md" -}}
-        <text>{{ .Title | safeHTML }}</text>
-        {{- end }}
-      </navLabel>
-      <content src="cover.xhtml" />
-    </navPoint>
-    <navPoint id="table-of-content" playOrder="2">
-      <navLabel>
-        {{ with .GetPage "/toc.md" -}}
-        <text>{{ .Title | safeHTML }}</text>
-        {{- end }}
-      </navLabel>
-      <content src="toc.xhtml" />
-    </navPoint>
-
-{{ $i := 0 -}}
-{{- range where .Site.RegularPages "Section" "ne" "" }}
-    <navPoint id="chapter_{{ $i }}"
-              playOrder="{{ add $i 3 }}">
-      <navLabel>
-        <text>{{ .Title }}</text>
-      </navLabel>
-      <content src="{{ replace .Permalink `/OEBPS/` `` }}" />
-    </navPoint>
-{{ $i = add $i 1 -}}
-{{- end -}}
+    {{- partial "item.ncx" (dict "ctx" . "ch" 1) }}
   </navMap>
 </ncx>
