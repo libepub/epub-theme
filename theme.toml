@@ -1,0 +1,12 @@
+name = "epub-theme"
+license = "CC-BY-SA"
+licenselink = "https://github.com/libepub/epub-theme"
+description = "Epub Theme"
+homepage = "https://github.com/libepub/epub-theme"
+tags = ["Epub"]
+features = ["Epub"]
+min_version = "0.76.0"
+
+[author]
+name ="Abdullah"
+homepage = "https://github.com/libepub"
