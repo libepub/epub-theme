@@ -1,0 +1,13 @@
+{{- printf "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" | safeHTML }}
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ops="http://www.idpf.org/2007/ops"
+      xml:lang="{{ .Lang }}">
+  <head>
+    <title>{{ .Site.Params.title }}: {{ if .SectionsEntries | len | lt 1 }}{{- .Parent.Title }} {{ end }}{{ .Title }}</title>
+    {{- $pathlvl := split (path.Dir .Permalink) "/" | after 2 | len }}
+    <link rel="stylesheet" type="text/css" href="{{
+        strings.Repeat (cond (gt $pathlvl 0) $pathlvl 0) `../` | printf `%scss/stylesheet.css` | path.Clean
+    }}" />
+  </head>
+  {{- block "main" . }}{{ end }}
+</html>

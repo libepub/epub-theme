@@ -1,14 +1,5 @@
-{{- printf "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" | safeHTML }}
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ops="http://www.idpf.org/2007/ops"
-      xml:lang="{{ .Lang }}">
-  <head>
-    <title>{{ .Site.Params.title }}: {{ if .SectionsEntries | len | lt 1 }}{{- .Parent.Title }} {{ end }}{{ .Title }}</title>
-    {{- $pathlvl := split (replace .Permalink `/OEBPS/` `` | path.Dir ) "/" | len | add -1 -}}
-    <link rel="stylesheet" type="text/css" href="{{
-        strings.Repeat (cond (gt $pathlvl 0) (add $pathlvl 1) 0) `../` | printf `%s/css/stylesheet.css` | path.Clean
-    }}" />
-  </head>
+{{- define "main" }}
+
 {{- if eq .Params.Ebook "toc" }}
   <body>
    <h1>{{ .Site.Params.title }}</h1>
@@ -41,4 +32,5 @@
 {{ .Content }}
 {{- end }}
   </body>
-</html>
+
+{{- end -}}

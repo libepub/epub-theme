@@ -6,7 +6,7 @@
 	{{- range first 1 . -}}
 		{{- $scaled := .Resize $size -}}
 	<figure>
-		<img src="{{- replace $scaled.RelPermalink (path.Dir $.Page.RelPermalink) `.` -}}" alt="{{ $caption | default $.Page.Title }}" />
+		<img src="{{- replace $scaled.RelPermalink (path.Dir $.Page.RelPermalink | printf `%s/`) `` -}}" alt="{{ $caption | default $.Page.Title }}" />
 		<figcaption>[ {{ $caption }} ]</figcaption>
 	</figure>
 	{{- end -}}
