@@ -1,0 +1,3 @@
+{{- $base := .Page.RelPermalink | path.Dir -}}
+{{- $page :=  .Get 0 | relref .Page | relURL -}}
+{{- replace $page $base `.` -}}
